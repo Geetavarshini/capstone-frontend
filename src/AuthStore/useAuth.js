@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -13,11 +14,12 @@ export const useAuth = create(
       isAuthenticated: false,
       isHydrated: false, 
 
+      //LOGIN
       login: async (userCredObj) => {
         try {
           set({ loading: true, error: null });
 
-          let res = await axios.post(
+          const res = await axios.post(
             `${BASE_URL}/common-api/authenticate`,
             userCredObj,
             { withCredentials: true }
@@ -38,6 +40,7 @@ export const useAuth = create(
         }
       },
 
+      //LOGOUT
       logout: async () => {
         await axios.get(`${BASE_URL}/common-api/logout`, {
           withCredentials: true,
@@ -51,11 +54,13 @@ export const useAuth = create(
         localStorage.removeItem("user-auth-storage");
       },
 
+      //CHECK AUTH
       checkAuth: async () => {
         try {
-          let res = await axios.get(`${BASE_URL}/common-api/check-auth`, {
-            withCredentials: true,
-          });
+          const res = await axios.get(
+            `${BASE_URL}/common-api/check-auth`,
+            { withCredentials: true }
+          );
 
           set({
             isAuthenticated: true,
@@ -71,15 +76,19 @@ export const useAuth = create(
     }),
     {
       name: "user-auth-storage",
+
       partialize: (state) => ({
         currentUser: state.currentUser,
         isAuthenticated: state.isAuthenticated,
       }),
 
-      
+     
       onRehydrateStorage: () => (state) => {
-        state.isHydrated = true;
+        if (state) {
+          state.setState?.({ isHydrated: true }); 
+        }
       },
     }
   )
 );
+

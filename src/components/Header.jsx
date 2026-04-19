@@ -47,17 +47,17 @@ function Header() {
 
           {/* DASHBOARD TEXT */}
           <div className="hidden md:flex flex-1 justify-center">
-            {isHydrated && currentUser && (
-              <span className="text-white/90 font-semibold text-lg">
-                {currentUser.firstName}'s Dashboard
-              </span>
-            )}
+            <span className="text-white/90 font-semibold text-lg">
+              {currentUser?.firstName 
+                ? `${currentUser.firstName}'s Dashboard` 
+                : ""}
+            </span>
           </div>
 
-          {/* MENU */}
+          {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center gap-4">
             
-            {!isHydrated || !currentUser ? (
+            {!currentUser ? (
               <ul className="flex items-center gap-3">
                 <li><NavLink className={linkStyles} to="/">Home</NavLink></li>
                 <li><NavLink className={linkStyles} to="/register">Register</NavLink></li>
@@ -66,12 +66,14 @@ function Header() {
             ) : (
               <div className="flex items-center gap-3 pl-4">
                 
+                {/* PROFILE IMAGE */}
                 <img 
                   className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
-                  src={currentUser.profileImageUrl}
+                  src={currentUser?.profileImageUrl || ""}
                   alt="profile"
                 />
 
+                {/* LOGOUT */}
                 <button 
                   onClick={handleLogout}
                   className="px-4 py-2 bg-white text-red-600 text-sm font-semibold rounded-xl hover:bg-red-500 hover:text-white transition-all"
@@ -93,6 +95,43 @@ function Header() {
           </div>
         </div>
       </div>
+
+      {/* MOBILE MENU */}
+      <div className={`md:hidden transition-all duration-300 ${isOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className="px-6 pb-6 space-y-3 bg-gradient-to-b from-indigo-600 to-purple-600">
+          
+          {!currentUser ? (
+            <ul className="space-y-2">
+              <li><NavLink onClick={toggleMenu} className={linkStyles} to="/">Home</NavLink></li>
+              <li><NavLink onClick={toggleMenu} className={linkStyles} to="/register">Register</NavLink></li>
+              <li><NavLink onClick={toggleMenu} className={linkStyles} to="/login">Login</NavLink></li>
+            </ul>
+          ) : (
+            <div className="pt-4 border-t border-white/20">
+              
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  className="w-12 h-12 rounded-full border-2 border-white object-cover"
+                  src={currentUser?.profileImageUrl || ""}
+                  alt="user"
+                />
+                <span className="text-white font-semibold">
+                  {currentUser?.firstName || ""}
+                </span>
+              </div>
+
+              <button 
+                onClick={handleLogout}
+                className="w-full py-2 bg-white text-red-600 font-semibold rounded-xl hover:bg-red-500 hover:text-white transition"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+
+        </div>
+      </div>
+
     </nav>
   );
 }
