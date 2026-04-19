@@ -28,7 +28,7 @@ function Register() {
       formData.append(key, userObj[key]);
     });
 
-    formData.append("profileImageUrl", profileImageUrl[0]);
+    formData.append("profileImageUrl", profileImageUrl?.[0]);
 
     try {
       let url =
@@ -64,7 +64,7 @@ function Register() {
   };
 
   const handleImagePreview = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {

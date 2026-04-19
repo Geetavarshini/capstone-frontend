@@ -61,7 +61,7 @@ function Header() {
               <div className="flex items-center gap-3 pl-4">
                 <img 
                   className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
-                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName[0]}${currentUser.lastName[0]}`}
+                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName?.[0]}${currentUser.lastName?.[0]}`}
                   alt="profile"
                 />
                 <button 
@@ -109,7 +109,7 @@ function Header() {
               <div className="flex items-center gap-3 mb-4">
                 <img 
                   className="w-12 h-12 rounded-full border-2 border-white"
-                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName[0]}${currentUser.lastName[0]}`}
+                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName?.[0]}${currentUser.lastName?.[0]}`}
                   alt="user"
                 />
                 <span className="text-white font-semibold">
