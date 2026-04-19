@@ -43,7 +43,7 @@ function Footer() {
             </h4>
             <ul className="space-y-4">
               <SocialLink 
-                href="mailto:mudumalanithin6@gmail.com"
+                href="mailto:geetavarshini29@example.com"
                 text="Email"
                 icon={<span>📧</span>}
               />
@@ -62,7 +62,7 @@ function Footer() {
             </h4>
             <ul className="space-y-4">
               <SocialLink 
-                href="https://github.com/nithin-6546"
+                href="https://github.com/Geetavarshini"
                 text="GitHub"
                 icon={<span>💻</span>}
               />
