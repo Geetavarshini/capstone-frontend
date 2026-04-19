@@ -17,6 +17,7 @@ function Login() {
   const navigate = useNavigate();
 
   const onLoginSubmit = async (userCredObj) => {
+    console.log("USER DATA:", useAuth.getState().currentUser);
     await login(userCredObj);
     if (!useAuth.getState().error) {
   const user = useAuth.getState().currentUser;
