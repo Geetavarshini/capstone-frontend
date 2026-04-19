@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -17,6 +18,7 @@ function Register() {
 
   const onFormSubmit = async (newUser) => {
     setLoading(true);
+    setError(null);
 
     const formData = new FormData();
     let { role, profileImageUrl, ...userObj } = newUser;
@@ -28,18 +30,32 @@ function Register() {
     formData.append("profileImageUrl", profileImageUrl[0]);
 
     try {
-      if (role === "USER") {
-        let res = await axios.post(`${BASE_URL}/user-api/users`, formData);
-        if (res.status === 201) navigate("/login");
-      }
+      let url =
+        role === "AUTHOR"
+          ? `${BASE_URL}/author-api/users`
+          : `${BASE_URL}/user-api/users`;
 
-      if (role === "AUTHOR") {
-        let res = await axios.post(`${BASE_URL}/author-api/users`, formData);
-        if (res.status === 201) navigate("/login");
+      const res = await axios.post(
+        url,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+
+      if (res.status === 201 || res.status === 200) {
+        navigate("/login");
       }
 
     } catch (err) {
-      const msg = err.response?.data?.message || "Registration failed";
+      const msg =
+        err.response?.data?.error ||   // 🔥 important (duplicate email etc.)
+        err.response?.data?.message ||
+        "Registration failed";
+
       setError(msg);
     } finally {
       setLoading(false);
@@ -68,47 +84,49 @@ function Register() {
           🚀 Create Account
         </h2>
 
+        {/* ERROR */}
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-xl mb-4 text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
 
-          {/* Name */}
+          {/* FIRST NAME */}
           <input
             placeholder="First Name"
-            {...register("firstName", { required: "Required" })}
+            {...register("firstName", { required: "First name required" })}
             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400"
           />
           {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName.message}</p>}
 
+          {/* LAST NAME */}
           <input
             placeholder="Last Name"
-            {...register("lastName", { required: "Required" })}
+            {...register("lastName", { required: "Last name required" })}
             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          {/* Email */}
+          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email"
-            {...register("email", { required: "Required" })}
+            {...register("email", { required: "Email required" })}
             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          {/* Password */}
+          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
-            {...register("password", { required: "Required" })}
+            {...register("password", { required: "Password required" })}
             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          {/* Role */}
+          {/* ROLE */}
           <select
-            {...register("role", { required: true })}
+            {...register("role", { required: "Select role" })}
             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="">Select Role</option>
@@ -116,26 +134,30 @@ function Register() {
             <option value="AUTHOR">Author</option>
           </select>
 
-          {/* Image Upload */}
+          {/* IMAGE */}
           <div>
             <input
               type="file"
-              {...register("profileImageUrl", { required: true })}
+              {...register("profileImageUrl", { required: "Image required" })}
               onChange={handleImagePreview}
               className="w-full text-sm"
             />
             {fileError && <p className="text-red-500 text-xs">{fileError}</p>}
 
             {preview && (
-              <img src={preview} alt="preview" className="w-16 h-16 rounded-full mt-2 object-cover" />
+              <img
+                src={preview}
+                alt="preview"
+                className="w-16 h-16 rounded-full mt-2 object-cover"
+              />
             )}
           </div>
 
-          {/* Button */}
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:scale-[1.02] hover:shadow-lg transition-all"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:scale-[1.02] hover:shadow-lg transition-all disabled:bg-gray-300"
           >
             {loading ? "Creating..." : "Register"}
           </button>
@@ -158,3 +180,4 @@ function Register() {
 }
 
 export default Register;
+
