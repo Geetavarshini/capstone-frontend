@@ -17,30 +17,41 @@ function Login() {
   const navigate = useNavigate();
 
   const onLoginSubmit = async (userCredObj) => {
-    console.log("USER DATA:", useAuth.getState().currentUser);
     await login(userCredObj);
-    if (!useAuth.getState().error) {
-  const user = useAuth.getState().currentUser;
 
-  toast.success("Logged in Successfully");
+    // get updated state AFTER login
+    const state = useAuth.getState();
+    const user = state.currentUser;
 
-  if (user?.role === "USER") {
-    navigate("/user-profile");
-  } else if (user?.role === "AUTHOR") {
-    navigate("/author-profile");
-  }
-}
-  }
+    console.log("AFTER LOGIN USER:", user);
 
-  useEffect(() => {
-  if (isAuthenticated && currentUser?.role) {
-    if (currentUser.role === "USER") {
-      navigate("/user-profile");
-    } else if (currentUser.role === "AUTHOR") {
-      navigate("/author-profile");
+    if (!state.error && user) {
+      toast.success("Logged in Successfully");
+
+      const role = user?.role?.toUpperCase();
+
+      if (role === "USER") {
+        navigate("/user-profile");
+      } else if (role === "AUTHOR") {
+        navigate("/author-profile");
+      } else {
+        console.log("Role missing or invalid:", role);
+      }
     }
-  }
-}, [isAuthenticated, currentUser]);
+  };
+
+  
+  useEffect(() => {
+    if (isAuthenticated && currentUser?.role) {
+      const role = currentUser.role.toUpperCase();
+
+      if (role === "USER") {
+        navigate("/user-profile");
+      } else if (role === "AUTHOR") {
+        navigate("/author-profile");
+      }
+    }
+  }, [isAuthenticated, currentUser, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4">

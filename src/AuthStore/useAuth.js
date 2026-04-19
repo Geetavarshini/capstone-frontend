@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -12,6 +13,7 @@ export const useAuth = create(
       error: null,
       isAuthenticated: false,
 
+      
       login: async (userCredWithRole) => {
         let { role, ...userCredObj } = userCredWithRole;
         try {
@@ -23,10 +25,12 @@ export const useAuth = create(
             { withCredentials: true }
           );
 
+          console.log("LOGIN RESPONSE:", res.data); 
+
           set({
             loading: false,
             isAuthenticated: true,
-            currentUser: res.data.payload,
+            currentUser: res.data.payload || res.data.user || null,
           });
         } catch (err) {
           set({
@@ -38,6 +42,7 @@ export const useAuth = create(
         }
       },
 
+     
       logout: async () => {
         try {
           set({ loading: true, error: null });
@@ -61,6 +66,7 @@ export const useAuth = create(
         }
       },
 
+      
       checkAuth: async () => {
         set({ loading: true });
 
@@ -72,7 +78,7 @@ export const useAuth = create(
           set({
             loading: false,
             isAuthenticated: true,
-            currentUser: res.data.payload,
+            currentUser: res.data.payload || res.data.user || null, 
           });
         } catch (err) {
           set({
@@ -93,3 +99,4 @@ export const useAuth = create(
     }
   )
 );
+
