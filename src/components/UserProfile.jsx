@@ -9,26 +9,17 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 function UserProfile() {
   const currentUser = useAuth((state) => state.currentUser);
+  const isHydrated = useAuth((state) => state.isHydrated); // ✅ IMPORTANT
+
   const navigate = useNavigate();
+
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!currentUser) {
-      const storedUser = localStorage.getItem('user');
-      if (!storedUser) {
-        navigate("/login");
-      }
-    }
-  }, [currentUser, navigate]);
+  // ⛔ BLOCK UI UNTIL USER IS READY (NO FLICKER / NO EMPTY NAME)
+  if (!isHydrated || !currentUser) return null;
 
   const fetchArticles = async () => {
-    const userId = currentUser?._id || currentUser?.userId || currentUser?.id;
-    
-    if (!currentUser || !userId) {
-      return;
-    }
-
     try {
       setLoading(true);
 
@@ -36,7 +27,7 @@ function UserProfile() {
         `${BASE_URL}/user-api/articles`,
         { withCredentials: true }
       );
-      
+
       if (res.data?.payload) {
         setArticles(res.data.payload);
       }
@@ -48,16 +39,12 @@ function UserProfile() {
   };
 
   useEffect(() => {
-    if (currentUser) {
-      fetchArticles();
-    }
-  }, [currentUser]);
+    fetchArticles();
+  }, []);
 
   const handleReadMore = (article) => {
     navigate(`/article/${article._id}`, { state: { article } });
   };
-
-  if (!currentUser) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 p-6">
@@ -67,10 +54,11 @@ function UserProfile() {
         {/* HEADER */}
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold text-gray-900">
-            📚 Explore Articles
+            📚 {currentUser.firstName}'s Dashboard
           </h1>
-          <p className="text-gray-500 mt-2">
-            Welcome, {currentUser.firstName}
+
+          <p className="text-gray-500 mt-2 text-lg">
+            Welcome back, <span className="font-semibold">{currentUser.firstName}</span>
           </p>
         </div>
 
@@ -81,7 +69,6 @@ function UserProfile() {
             <p className="text-gray-400">Loading articles...</p>
           </div>
         ) : (
-
           <>
             {/* EMPTY STATE */}
             {articles.length === 0 ? (

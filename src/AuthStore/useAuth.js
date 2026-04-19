@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -12,10 +11,9 @@ export const useAuth = create(
       loading: false,
       error: null,
       isAuthenticated: false,
+      isHydrated: false, 
 
-      
-      login: async (userCredWithRole) => {
-        let { role, ...userCredObj } = userCredWithRole;
+      login: async (userCredObj) => {
         try {
           set({ loading: true, error: null });
 
@@ -25,12 +23,10 @@ export const useAuth = create(
             { withCredentials: true }
           );
 
-          console.log("LOGIN RESPONSE:", res.data); 
-
           set({
             loading: false,
             isAuthenticated: true,
-            currentUser: res.data.payload || res.data.user || null,
+            currentUser: res.data.payload,
           });
         } catch (err) {
           set({
@@ -42,50 +38,33 @@ export const useAuth = create(
         }
       },
 
-     
       logout: async () => {
-        try {
-          set({ loading: true, error: null });
+        await axios.get(`${BASE_URL}/common-api/logout`, {
+          withCredentials: true,
+        });
 
-          await axios.get(`${BASE_URL}/common-api/logout`, {
-            withCredentials: true,
-          });
+        set({
+          currentUser: null,
+          isAuthenticated: false,
+        });
 
-          set({
-            loading: false,
-            isAuthenticated: false,
-            currentUser: null,
-          });
-
-          localStorage.removeItem("user-auth-storage");
-        } catch (err) {
-          set({
-            loading: false,
-            error: err.response?.data?.message || "Logout failed",
-          });
-        }
+        localStorage.removeItem("user-auth-storage");
       },
 
-      
       checkAuth: async () => {
-        set({ loading: true });
-
         try {
           let res = await axios.get(`${BASE_URL}/common-api/check-auth`, {
             withCredentials: true,
           });
 
           set({
-            loading: false,
             isAuthenticated: true,
-            currentUser: res.data.payload || res.data.user || null, 
+            currentUser: res.data.payload,
           });
-        } catch (err) {
+        } catch {
           set({
-            loading: false,
             isAuthenticated: false,
             currentUser: null,
-            error: null,
           });
         }
       },
@@ -96,7 +75,11 @@ export const useAuth = create(
         currentUser: state.currentUser,
         isAuthenticated: state.isAuthenticated,
       }),
+
+      
+      onRehydrateStorage: () => (state) => {
+        state.isHydrated = true;
+      },
     }
   )
 );
-

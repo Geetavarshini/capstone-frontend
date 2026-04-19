@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { useAuth } from '../AuthStore/useAuth';
@@ -5,7 +6,11 @@ import { toast } from 'react-hot-toast';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser, logout } = useAuth();
+
+  const currentUser = useAuth((state) => state.currentUser);
+  const isHydrated = useAuth((state) => state.isHydrated);
+  const logout = useAuth((state) => state.logout);
+
   const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -13,7 +18,7 @@ function Header() {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
-    navigate("");
+    navigate("/");
     setIsOpen(false);
   };
 
@@ -24,6 +29,9 @@ function Header() {
         : "text-white/80 hover:text-white hover:bg-white/10"
     }`;
 
+  // ✅ BLOCK RENDER UNTIL DATA IS READY (KEY FIX)
+  if (!isHydrated || !currentUser) return null;
+
   return (
     <nav className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 backdrop-blur-lg shadow-lg sticky top-0 z-50">
       
@@ -32,46 +40,38 @@ function Header() {
           
           {/* LOGO */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white font-bold text-lg">
               B
             </div>
-            <span className="text-white font-extrabold text-xl tracking-tight hidden sm:block">
+            <span className="text-white font-extrabold text-xl hidden sm:block">
               BlogApp
             </span>
           </div>
 
-          {/* CENTER TEXT */}
+          {/* DASHBOARD TEXT */}
           <div className="hidden md:flex flex-1 justify-center">
-            {currentUser && (
-              <span className="text-white/90 font-semibold text-lg">
-                {currentUser.firstName}'s Dashboard
-              </span>
-            )}
+            <span className="text-white/90 font-semibold text-lg">
+              {currentUser.firstName}'s Dashboard
+            </span>
           </div>
 
           {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center gap-4">
-            {!currentUser ? (
-              <ul className="flex items-center gap-3">
-                <li><NavLink className={linkStyles} to="/">Home</NavLink></li>
-                <li><NavLink className={linkStyles} to="/register">Register</NavLink></li>
-                <li><NavLink className={linkStyles} to="/login">Login</NavLink></li>
-              </ul>
-            ) : (
-              <div className="flex items-center gap-3 pl-4">
-                <img 
-                  className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
-                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName?.[0]}${currentUser.lastName?.[0]}`}
-                  alt="profile"
-                />
-                <button 
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-white text-red-600 text-sm font-semibold rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-md"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+            
+            {/* PROFILE IMAGE */}
+            <img 
+              className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md"
+              src={currentUser.profileImageUrl}
+              alt="profile"
+            />
+
+            {/* LOGOUT */}
+            <button 
+              onClick={handleLogout}
+              className="px-4 py-2 bg-white text-red-600 text-sm font-semibold rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-md"
+            >
+              Logout
+            </button>
           </div>
 
           {/* MOBILE BUTTON */}
@@ -97,34 +97,27 @@ function Header() {
         
         <div className="px-6 pb-6 space-y-3 bg-gradient-to-b from-indigo-600 to-purple-600">
           
-          {!currentUser ? (
-            <>
-              <NavLink onClick={() => setIsOpen(false)} className="block text-white py-2 font-semibold" to="/">Home</NavLink>
-              <NavLink onClick={() => setIsOpen(false)} className="block text-white py-2 font-semibold" to="/register">Register</NavLink>
-              <NavLink onClick={() => setIsOpen(false)} className="block text-white py-2 font-semibold" to="/login">Login</NavLink>
-            </>
-          ) : (
-            <div className="pt-4 border-t border-white/20">
-              
-              <div className="flex items-center gap-3 mb-4">
-                <img 
-                  className="w-12 h-12 rounded-full border-2 border-white"
-                  src={currentUser.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser.firstName?.[0]}${currentUser.lastName?.[0]}`}
-                  alt="user"
-                />
-                <span className="text-white font-semibold">
-                  {currentUser.firstName}
-                </span>
-              </div>
-
-              <button 
-                onClick={handleLogout}
-                className="w-full py-2 bg-white text-red-600 font-semibold rounded-xl hover:bg-red-500 hover:text-white transition"
-              >
-                Logout
-              </button>
+          <div className="pt-4 border-t border-white/20">
+            
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                className="w-12 h-12 rounded-full border-2 border-white object-cover"
+                src={currentUser.profileImageUrl}
+                alt="user"
+              />
+              <span className="text-white font-semibold">
+                {currentUser.firstName}
+              </span>
             </div>
-          )}
+
+            <button 
+              onClick={handleLogout}
+              className="w-full py-2 bg-white text-red-600 font-semibold rounded-xl hover:bg-red-500 hover:text-white transition"
+            >
+              Logout
+            </button>
+          </div>
+
         </div>
       </div>
 

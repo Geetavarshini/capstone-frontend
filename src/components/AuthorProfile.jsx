@@ -9,13 +9,17 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 function AuthorProfile() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const currentUser = useAuth((state) => state.currentUser);
-  const isAuthenticated = useAuth((state) => state.isAuthenticated);
+  const isHydrated = useAuth((state) => state.isHydrated); // ✅ IMPORTANT
   const navigate = useNavigate();
 
+  // ⛔ BLOCK UI UNTIL USER IS READY (NO FLICKER)
+  if (!isHydrated || !currentUser) return null;
+
   useEffect(() => {
-    const userId = currentUser?._id || currentUser?.userId || currentUser?.id;
+    const userId =
+      currentUser._id || currentUser.userId || currentUser.id;
 
     if (!userId) return;
 
@@ -32,9 +36,7 @@ function AuthorProfile() {
           setArticles(res.data.payload);
         }
       } catch (err) {
-        if (err.response?.status !== 400) {
-          toast.error("Failed to fetch articles");
-        }
+        toast.error("Failed to fetch articles");
       } finally {
         setLoading(false);
       }
@@ -53,10 +55,14 @@ function AuthorProfile() {
           
           <div>
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-              🧠 My Workspace
+              🧠 {currentUser.firstName}'s Workspace
             </h1>
+
             <p className="text-gray-500 mt-2 text-lg">
-              Welcome back, <span className="font-semibold">{currentUser?.firstName}</span>
+              Welcome back,{" "}
+              <span className="font-semibold">
+                {currentUser.firstName}
+              </span>
             </p>
           </div>
 
@@ -72,11 +78,13 @@ function AuthorProfile() {
         {loading ? (
           <div className="flex flex-col items-center justify-center mt-20 gap-4">
             <div className="animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full"></div>
-            <p className="text-gray-400 animate-pulse">Loading your workspace...</p>
+            <p className="text-gray-400 animate-pulse">
+              Loading your workspace...
+            </p>
           </div>
         ) : (
           <>
-            {/* EMPTY STATE */}
+            {/* EMPTY */}
             {articles.length === 0 ? (
               <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
                 <p className="text-gray-400 text-xl font-medium mb-4">
@@ -90,14 +98,15 @@ function AuthorProfile() {
                 </button>
               </div>
             ) : (
-
-              /* ARTICLES GRID */
+              /* GRID */
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {articles.map((article) => (
                   <div 
                     key={article._id} 
                     className={`bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 flex flex-col justify-between transition-all group hover:shadow-xl hover:-translate-y-1 ${
-                      article.isArticleActive === false ? "opacity-60 grayscale" : ""
+                      article.isArticleActive === false
+                        ? "opacity-60 grayscale"
+                        : ""
                     }`}
                   >
                     <div>
@@ -123,9 +132,11 @@ function AuthorProfile() {
                     </div>
                     
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      
                       <div className="flex items-center gap-2">
+                        {/* ✅ ONLY PROFILE IMAGE (NO INITIALS) */}
                         <img 
-                          src={currentUser?.profileImageUrl || `https://ui-avatars.com/api/?name=${currentUser?.firstName}`} 
+                          src={currentUser.profileImageUrl}
                           className="w-9 h-9 rounded-full object-cover shadow-sm" 
                           alt="avatar" 
                         />
@@ -135,7 +146,11 @@ function AuthorProfile() {
                       </div>
 
                       <button 
-                        onClick={() => navigate(`/article/${article._id}`, { state: { article } })}
+                        onClick={() =>
+                          navigate(`/article/${article._id}`, {
+                            state: { article },
+                          })
+                        }
                         className="text-sm font-semibold text-blue-600 hover:text-blue-800 transition"
                       >
                         View →
@@ -144,7 +159,6 @@ function AuthorProfile() {
                   </div>
                 ))}
               </div>
-
             )}
           </>
         )}
