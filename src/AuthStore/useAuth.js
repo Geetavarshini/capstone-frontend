@@ -1,8 +1,9 @@
 import axios from "axios";
 import { create } from "zustand";
-import { persist } from "zustand/middleware"; // 1. Import persist middleware
+import { persist } from "zustand/middleware";
 
-const BASE_URL = "https://capstone-project-rbl1.onrender.com";
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export const useAuth = create(
   persist(
     (set) => ({
@@ -11,16 +12,17 @@ export const useAuth = create(
       error: null,
       isAuthenticated: false,
 
-      // LOGIN LOGIC
       login: async (userCredWithRole) => {
         let { role, ...userCredObj } = userCredWithRole;
         try {
           set({ loading: true, error: null });
+
           let res = await axios.post(
             `${BASE_URL}/common-api/authenticate`,
             userCredObj,
             { withCredentials: true }
           );
+
           set({
             loading: false,
             isAuthenticated: true,
@@ -36,18 +38,20 @@ export const useAuth = create(
         }
       },
 
-      // LOGOUT LOGIC
       logout: async () => {
         try {
           set({ loading: true, error: null });
+
           await axios.get(`${BASE_URL}/common-api/logout`, {
             withCredentials: true,
           });
+
           set({
             loading: false,
             isAuthenticated: false,
             currentUser: null,
           });
+
           localStorage.removeItem("user-auth-storage");
         } catch (err) {
           set({
@@ -57,13 +61,14 @@ export const useAuth = create(
         }
       },
 
-      // SESSION CHECK
       checkAuth: async () => {
         set({ loading: true });
+
         try {
           let res = await axios.get(`${BASE_URL}/common-api/check-auth`, {
             withCredentials: true,
           });
+
           set({
             loading: false,
             isAuthenticated: true,

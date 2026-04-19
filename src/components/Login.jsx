@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 
 function Login() {
-  // 1. Initialize form with validation mode
   const { register, handleSubmit, formState: { errors } } = useForm({
     mode: 'onTouched'
   });
@@ -13,22 +12,17 @@ function Login() {
   const login = useAuth((state) => state.login);
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const currentUser = useAuth((state) => state.currentUser);
-  const error = useAuth((state) => state.error); // Get server-side error from Zustand
-  const loading = useAuth((state) => state.loading); // Get loading state
+  const error = useAuth((state) => state.error);
+  const loading = useAuth((state) => state.loading);
   const navigate = useNavigate();
 
   const onLoginSubmit = async (userCredObj) => {
-    // Attempt login through Zustand store
     await login(userCredObj);
-    
-    // We check the store's state after the async call
-    // If no error was set by the store, it was a success
     if (!useAuth.getState().error) {
       toast.success("Logged in Successfully");
     }
   };
 
-  // 2. Role-based Redirection
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       if (currentUser.role === "USER") {
@@ -40,87 +34,98 @@ function Login() {
   }, [isAuthenticated, currentUser, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-        <h2 className="text-3xl font-black text-center mb-8 text-gray-800">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4">
+      
+      <div className="w-full max-w-sm bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-gray-100">
+        
+        <h2 className="text-3xl font-extrabold text-center mb-8 text-gray-900">
+          🔐 Welcome Back
+        </h2>
 
-        {/* Error display logic */}
-  {error && (
-    <div className="bg-red-50 border-l-4 border-red-500 p-3 mb-4 rounded shadow-sm animate-pulse">
-      <div className="flex items-center">
-        <svg className="w-4 h-4 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-        </svg>
-        <p className="text-red-700 text-xs font-black uppercase tracking-wider">
-          {error}
-        </p>
-      </div>
-    </div>
-  )}
+        {/* Error */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded-xl mb-4">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit(onLoginSubmit)}>
+        <form onSubmit={handleSubmit(onLoginSubmit)} className="space-y-4">
           
-          {/* Email Input */}
-          <div className="mb-4">
+          {/* Email */}
+          <div>
             <input 
               type="email" 
               {...register("email", { 
                 required: "Email is required",
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: "Please enter a valid email"
+                  message: "Enter a valid email"
                 }
               })} 
-              placeholder="Email" 
-              className={`w-full border-2 p-3 rounded-lg focus:outline-none transition-colors ${
-                errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-blue-400'
+              placeholder="Email address" 
+              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
+                errors.email
+                  ? "border-red-400 focus:ring-2 focus:ring-red-300"
+                  : "border-gray-200 focus:ring-2 focus:ring-blue-400"
               }`} 
             />
             {errors.email && (
-              <p className='text-red-600 text-[10px] font-black uppercase mt-1 ml-1 tracking-tight'>
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
             )}
           </div>
 
-          {/* Password Input */}
-          <div className="mb-2">
+          {/* Password */}
+          <div>
             <input 
               type="password" 
               {...register("password", { 
                 required: "Password is required",
                 minLength: {
                   value: 4,
-                  message: "Password must be at least 4 characters"
+                  message: "Minimum 4 characters"
                 }
               })} 
               placeholder="Password" 
-              className={`w-full border-2 p-3 rounded-lg focus:outline-none transition-colors ${
-                errors.password ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-blue-400'
+              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
+                errors.password
+                  ? "border-red-400 focus:ring-2 focus:ring-red-300"
+                  : "border-gray-200 focus:ring-2 focus:ring-blue-400"
               }`} 
             />
             {errors.password && (
-              <p className='text-red-600 text-[10px] font-black uppercase mt-1 ml-1 tracking-tight'>
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
             )}
           </div>
 
-          <p className="text-end text-xs text-gray-400 cursor-pointer hover:underline hover:text-blue-500 transition-all mb-6">
+          <p className="text-right text-xs text-gray-400 hover:text-blue-500 cursor-pointer">
             Forgot password?
           </p>
 
+          {/* Button */}
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all disabled:bg-gray-300"
           >
             {loading ? "Authenticating..." : "Login"}
           </button>
         </form>
+
+        {/* Bottom text */}
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Don’t have an account?{" "}
+          <span 
+            onClick={() => navigate("/register")} 
+            className="text-blue-600 font-semibold cursor-pointer hover:underline"
+          >
+            Register
+          </span>
+        </p>
+
       </div>
     </div>
   );
 }
 
 export default Login;
+
