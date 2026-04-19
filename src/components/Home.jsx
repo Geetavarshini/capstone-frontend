@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../AuthStore/useAuth';
@@ -7,11 +8,17 @@ function Home() {
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const currentUser = useAuth((state) => state.currentUser);
 
+  
   const handleStartWriting = () => {
-    if (isAuthenticated) {
-      navigate(currentUser.role === "AUTHOR" ? "/author-profile" : "/user-profile");
-    } else {
+    if (!isAuthenticated || !currentUser) {
       navigate("/register");
+      return;
+    }
+
+    if (currentUser?.role === "AUTHOR") {
+      navigate("/author-profile");
+    } else {
+      navigate("/user-profile");
     }
   };
 
@@ -126,7 +133,7 @@ function Home() {
             Ready to share your story?
           </h2>
 
-          {isAuthenticated ? (
+          {isAuthenticated && currentUser ? (
             <>
               <p className="text-gray-500 mb-6">
                 Welcome back, {currentUser?.firstName}
