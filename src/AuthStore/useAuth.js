@@ -12,9 +12,9 @@ export const useAuth = create(
       loading: false,
       error: null,
       isAuthenticated: false,
-      isHydrated: false, 
+      isHydrated: false,
 
-      //LOGIN
+      // LOGIN
       login: async (userCredObj) => {
         try {
           set({ loading: true, error: null });
@@ -40,7 +40,7 @@ export const useAuth = create(
         }
       },
 
-      //LOGOUT
+      // LOGOUT
       logout: async () => {
         await axios.get(`${BASE_URL}/common-api/logout`, {
           withCredentials: true,
@@ -54,7 +54,7 @@ export const useAuth = create(
         localStorage.removeItem("user-auth-storage");
       },
 
-      //CHECK AUTH
+      // CHECK AUTH
       checkAuth: async () => {
         try {
           const res = await axios.get(
@@ -82,13 +82,14 @@ export const useAuth = create(
         isAuthenticated: state.isAuthenticated,
       }),
 
-     
-      onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.setState?.({ isHydrated: true }); 
+      // ✅ CORRECT HYDRATION FIX
+      onRehydrateStorage: () => (state, error) => {
+        if (!error) {
+          setTimeout(() => {
+            useAuth.setState({ isHydrated: true });
+          }, 0);
         }
       },
     }
   )
 );
-
