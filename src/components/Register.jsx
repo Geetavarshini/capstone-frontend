@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
+console.log(import.meta.env.VITE_API_URL);
 
 function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm();
