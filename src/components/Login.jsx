@@ -19,19 +19,27 @@ function Login() {
   const onLoginSubmit = async (userCredObj) => {
     await login(userCredObj);
     if (!useAuth.getState().error) {
-      toast.success("Logged in Successfully");
-    }
-  };
+  const user = useAuth.getState().currentUser;
+
+  toast.success("Logged in Successfully");
+
+  if (user?.role === "USER") {
+    navigate("/user-profile");
+  } else if (user?.role === "AUTHOR") {
+    navigate("/author-profile");
+  }
+}
+  }
 
   useEffect(() => {
-    if (isAuthenticated && currentUser) {
-      if (currentUser.role === "USER") {
-        navigate("/user-profile");
-      } else if (currentUser.role === "AUTHOR") {
-        navigate("/author-profile");
-      }
+  if (isAuthenticated && currentUser?.role) {
+    if (currentUser.role === "USER") {
+      navigate("/user-profile");
+    } else if (currentUser.role === "AUTHOR") {
+      navigate("/author-profile");
     }
-  }, [isAuthenticated, currentUser, navigate]);
+  }
+}, [isAuthenticated, currentUser]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4">
