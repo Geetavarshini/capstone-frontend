@@ -14,6 +14,7 @@ function Login() {
   const currentUser = useAuth((state) => state.currentUser);
   const error = useAuth((state) => state.error);
   const loading = useAuth((state) => state.loading);
+
   const navigate = useNavigate();
 
   const onLoginSubmit = async (userCredObj) => {
@@ -40,7 +41,6 @@ function Login() {
     }
   };
 
-  
   useEffect(() => {
     if (isAuthenticated && currentUser?.role) {
       const role = currentUser.role.toUpperCase();
@@ -54,98 +54,163 @@ function Login() {
   }, [isAuthenticated, currentUser, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4">
-      
-      <div className="w-full max-w-sm bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-gray-100">
-        
-        <h2 className="text-3xl font-extrabold text-center mb-8 text-gray-900">
-          🔐 Welcome Back
-        </h2>
+    <div className="relative min-h-screen overflow-hidden bg-[#fff7f2] flex items-center justify-center px-6 py-16">
 
-        {/* Error */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded-xl mb-4">
-            {error}
+      {/* BACKGROUND BLOBS */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-pink-300 rounded-full blur-3xl opacity-30"></div>
+
+      <div className="absolute top-40 right-0 w-96 h-96 bg-yellow-200 rounded-full blur-3xl opacity-30"></div>
+
+      <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-300 rounded-full blur-3xl opacity-30"></div>
+
+      {/* MAIN CARD */}
+      <div className="relative z-10 w-full max-w-md">
+
+        <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[40px] shadow-2xl overflow-hidden">
+
+          {/* TOP HEADER */}
+          <div className="bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 p-10 text-white text-center">
+
+            <div className="inline-block bg-white/20 backdrop-blur-md px-5 py-2 rounded-full text-sm font-semibold mb-6">
+              ✨ Welcome Back
+            </div>
+
+            <h2 className="text-5xl font-black mb-4">
+              Login
+            </h2>
+
+            <p className="text-white/90 text-lg">
+              Continue your creative journey
+            </p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit(onLoginSubmit)} className="space-y-4">
-          
-          {/* Email */}
-          <div>
-            <input 
-              type="email" 
-              {...register("email", { 
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Enter a valid email"
-                }
-              })} 
-              placeholder="Email address" 
-              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                errors.email
-                  ? "border-red-400 focus:ring-2 focus:ring-red-300"
-                  : "border-gray-200 focus:ring-2 focus:ring-blue-400"
-              }`} 
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+          {/* FORM SECTION */}
+          <div className="p-8">
+
+            {/* ERROR */}
+            {error && (
+              <div className="bg-red-100 border border-red-200 text-red-600 text-sm p-4 rounded-2xl mb-6">
+                {error}
+              </div>
             )}
+
+            <form
+              onSubmit={handleSubmit(onLoginSubmit)}
+              className="space-y-6"
+            >
+
+              {/* EMAIL */}
+              <div>
+
+                <label className="block text-sm font-bold text-gray-700 mb-3">
+                  📧 Email Address
+                </label>
+
+                <input
+                  type="email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "Enter a valid email"
+                    }
+                  })}
+                  placeholder="Enter your email..."
+                  className={`w-full px-5 py-4 rounded-2xl border bg-white/80 outline-none transition-all text-lg ${
+                    errors.email
+                      ? "border-red-400 focus:ring-4 focus:ring-red-200"
+                      : "border-gray-200 focus:ring-4 focus:ring-pink-200 focus:border-pink-400"
+                  }`}
+                />
+
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              {/* PASSWORD */}
+              <div>
+
+                <label className="block text-sm font-bold text-gray-700 mb-3">
+                  🔒 Password
+                </label>
+
+                <input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 4,
+                      message: "Minimum 4 characters"
+                    }
+                  })}
+                  placeholder="Enter your password..."
+                  className={`w-full px-5 py-4 rounded-2xl border bg-white/80 outline-none transition-all text-lg ${
+                    errors.password
+                      ? "border-red-400 focus:ring-4 focus:ring-red-200"
+                      : "border-gray-200 focus:ring-4 focus:ring-purple-200 focus:border-purple-400"
+                  }`}
+                />
+
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {/* FORGOT PASSWORD */}
+              <p className="text-right text-sm text-gray-400 hover:text-pink-500 cursor-pointer transition">
+                Forgot password?
+              </p>
+
+              {/* BUTTON */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 rounded-3xl bg-black text-white text-lg font-bold hover:scale-[1.02] hover:shadow-2xl transition-all disabled:opacity-60"
+              >
+                {loading
+                  ? "Authenticating..."
+                  : "🚀 Login"}
+              </button>
+
+            </form>
+
+            {/* DIVIDER */}
+            <div className="flex items-center gap-4 my-8">
+
+              <div className="flex-1 h-px bg-gray-200"></div>
+
+              <span className="text-gray-400 text-sm">
+                OR
+              </span>
+
+              <div className="flex-1 h-px bg-gray-200"></div>
+            </div>
+
+            {/* REGISTER TEXT */}
+            <div className="text-center">
+
+              <p className="text-gray-500 text-sm mb-4">
+                Don’t have an account yet?
+              </p>
+
+              <button
+                onClick={() => navigate("/register")}
+                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 text-white font-bold hover:scale-105 transition-all shadow-xl"
+              >
+                ✨ Create Account
+              </button>
+            </div>
+
           </div>
-
-          {/* Password */}
-          <div>
-            <input 
-              type="password" 
-              {...register("password", { 
-                required: "Password is required",
-                minLength: {
-                  value: 4,
-                  message: "Minimum 4 characters"
-                }
-              })} 
-              placeholder="Password" 
-              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
-                errors.password
-                  ? "border-red-400 focus:ring-2 focus:ring-red-300"
-                  : "border-gray-200 focus:ring-2 focus:ring-blue-400"
-              }`} 
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
-            )}
-          </div>
-
-          <p className="text-right text-xs text-gray-400 hover:text-blue-500 cursor-pointer">
-            Forgot password?
-          </p>
-
-          {/* Button */}
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all disabled:bg-gray-300"
-          >
-            {loading ? "Authenticating..." : "Login"}
-          </button>
-        </form>
-
-        {/* Bottom text */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Don’t have an account?{" "}
-          <span 
-            onClick={() => navigate("/register")} 
-            className="text-blue-600 font-semibold cursor-pointer hover:underline"
-          >
-            Register
-          </span>
-        </p>
-
+        </div>
       </div>
     </div>
   );
 }
 
 export default Login;
-
