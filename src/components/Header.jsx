@@ -43,7 +43,7 @@ function Header() {
     }`;
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#fffaf7]/80 backdrop-blur-xl border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-[#fffaf7]/95 backdrop-blur-xl border-b border-[#ece5df] shadow-[0_2px_20px_rgba(0,0,0,0.03)]">
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
@@ -101,7 +101,7 @@ function Header() {
                 <div className="flex items-center gap-3">
 
                   <img
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm"
                     src={
                       currentUser?.profileImageUrl ||
                       ""
@@ -117,7 +117,7 @@ function Header() {
                       }
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-400 capitalize">
                       {
                         currentUser?.role
                       }
@@ -128,7 +128,7 @@ function Header() {
                 {/* LOGOUT */}
                 <button
                   onClick={handleLogout}
-                  className="px-5 py-2.5 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all"
+                  className="px-5 py-2.5 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all shadow-sm"
                 >
                   Logout
                 </button>
@@ -141,7 +141,7 @@ function Header() {
 
             <button
               onClick={toggleMenu}
-              className="w-11 h-11 rounded-2xl bg-white border border-gray-200 text-gray-700 text-lg transition-all"
+              className="w-11 h-11 rounded-2xl bg-white border border-gray-200 text-gray-700 text-lg transition-all shadow-sm"
             >
               {isOpen ? "×" : "☰"}
             </button>
@@ -160,7 +160,7 @@ function Header() {
 
         <div className="px-6 pb-6">
 
-          <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-[28px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
+          <div className="bg-[#fffaf7]/95 backdrop-blur-xl border border-[#ece5df] rounded-[28px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
 
             {!currentUser ? (
               <ul className="space-y-5">
@@ -203,7 +203,7 @@ function Header() {
                 <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-6">
 
                   <img
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-sm"
                     src={
                       currentUser?.profileImageUrl ||
                       ""
@@ -219,7 +219,7 @@ function Header() {
                       }
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-400 capitalize">
                       {
                         currentUser?.role
                       }
@@ -230,7 +230,7 @@ function Header() {
                 {/* LOGOUT */}
                 <button
                   onClick={handleLogout}
-                  className="w-full py-3 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all"
+                  className="w-full py-3 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all shadow-sm"
                 >
                   Logout
                 </button>

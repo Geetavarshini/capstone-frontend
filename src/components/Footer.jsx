@@ -21,12 +21,12 @@ function Footer() {
   );
 
   return (
-    <footer className="relative overflow-hidden bg-[#fffaf7] border-t border-gray-100 mt-auto">
+    <footer className="relative overflow-hidden bg-[#f7f1eb] border-t border-[#e8dfd8] mt-auto">
 
-      {/* BACKGROUND */}
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-pink-100 rounded-full blur-3xl opacity-30"></div>
+      {/* SOFT BACKGROUND */}
+      <div className="absolute top-0 left-0 w-[280px] h-[280px] bg-pink-100 rounded-full blur-3xl opacity-20"></div>
 
-      <div className="absolute top-10 right-0 w-[300px] h-[300px] bg-purple-100 rounded-full blur-3xl opacity-30"></div>
+      <div className="absolute bottom-0 right-0 w-[280px] h-[280px] bg-purple-100 rounded-full blur-3xl opacity-20"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20">
 
@@ -36,7 +36,7 @@ function Footer() {
           {/* BRAND */}
           <div>
 
-            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/70 backdrop-blur-xl border border-white text-sm text-gray-600 mb-6 shadow-sm">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/80 backdrop-blur-xl border border-white text-sm text-gray-600 mb-6 shadow-sm">
               Creative publishing platform
             </span>
 
@@ -104,19 +104,19 @@ function Footer() {
 
             <div className="flex flex-wrap gap-3">
 
-              <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600">
+              <span className="px-4 py-2 rounded-full bg-white/90 border border-[#ece5df] text-sm text-gray-600 shadow-sm">
                 React
               </span>
 
-              <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600">
+              <span className="px-4 py-2 rounded-full bg-white/90 border border-[#ece5df] text-sm text-gray-600 shadow-sm">
                 Tailwind
               </span>
 
-              <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600">
+              <span className="px-4 py-2 rounded-full bg-white/90 border border-[#ece5df] text-sm text-gray-600 shadow-sm">
                 Node.js
               </span>
 
-              <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600">
+              <span className="px-4 py-2 rounded-full bg-white/90 border border-[#ece5df] text-sm text-gray-600 shadow-sm">
                 Express
               </span>
 
@@ -125,7 +125,7 @@ function Footer() {
         </div>
 
         {/* BOTTOM */}
-        <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-5">
+        <div className="pt-8 border-t border-[#e5ddd6] flex flex-col md:flex-row justify-between items-center gap-5">
 
           <p className="text-gray-400 text-sm">
             © {currentYear} BlogApp

@@ -99,23 +99,27 @@ function Login() {
 
       <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-purple-100 rounded-full blur-3xl opacity-40"></div>
 
-      {/* CARD */}
+      {/* CARD WRAPPER */}
       <div className="relative z-10 w-full max-w-md">
 
-        <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 md:p-10 shadow-[0_10px_40px_rgba(0,0,0,0.05)]">
+        {/* SOFT GLOW */}
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-100/50 via-white to-purple-100/50 blur-3xl opacity-70"></div>
+
+        {/* CARD */}
+        <div className="relative bg-white/75 backdrop-blur-xl border border-white/60 rounded-[32px] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
 
           {/* HEADER */}
           <div className="mb-10">
 
-            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600 mb-6">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600 mb-6 shadow-sm">
               Welcome back
             </span>
 
-            <h1 className="text-5xl font-semibold tracking-tight text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-[42px] font-semibold tracking-tight text-gray-900 mb-3">
               Login
             </h1>
 
-            <p className="text-lg text-gray-500 leading-relaxed">
+            <p className="text-[15px] text-gray-500 leading-relaxed max-w-sm">
               Continue reading and sharing stories.
             </p>
           </div>
@@ -217,7 +221,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all disabled:opacity-60"
+              className="w-full py-4 rounded-2xl bg-gray-900 text-white font-medium shadow-sm hover:shadow-md hover:bg-black transition-all duration-300 disabled:opacity-60"
             >
               {loading
                 ? "Authenticating..."
@@ -248,7 +252,7 @@ function Login() {
               onClick={() =>
                 navigate("/register")
               }
-              className="px-6 py-3 rounded-2xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all"
+              className="px-6 py-3 rounded-2xl bg-white/90 border border-gray-200 text-gray-700 font-medium shadow-sm hover:shadow-md hover:bg-white transition-all duration-300"
             >
               Create account
             </button>
