@@ -6,82 +6,65 @@ import { toast } from 'react-hot-toast';
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentUser = useAuth((state) => state.currentUser);
-  const isHydrated = useAuth((state) => state.isHydrated);
-  const logout = useAuth((state) => state.logout);
+  const currentUser = useAuth(
+    (state) => state.currentUser
+  );
+
+  const isHydrated = useAuth(
+    (state) => state.isHydrated
+  );
+
+  const logout = useAuth(
+    (state) => state.logout
+  );
 
   const navigate = useNavigate();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () =>
+    setIsOpen(!isOpen);
 
   const handleLogout = () => {
     logout();
-    toast.success("Logged out successfully");
+
+    toast.success(
+      "Logged out successfully"
+    );
+
     navigate("/");
+
     setIsOpen(false);
   };
 
   const linkStyles = ({ isActive }) =>
-    `transition-all duration-300 px-5 py-2.5 rounded-2xl text-sm font-bold ${
+    `transition-colors duration-200 text-sm font-medium ${
       isActive
-        ? "bg-white text-black shadow-xl"
-        : "text-white/80 hover:text-white hover:bg-white/10"
+        ? "text-gray-900"
+        : "text-gray-500 hover:text-gray-900"
     }`;
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-2xl bg-black/70 border-b border-white/10">
-
-      {/* TOP GRADIENT LINE */}
-      <div className="h-1 bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500"></div>
+    <nav className="sticky top-0 z-50 bg-[#fffaf7]/80 backdrop-blur-xl border-b border-gray-100">
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
-        <div className="flex justify-between items-center h-24">
+        <div className="flex justify-between items-center h-20">
 
           {/* LOGO */}
-          <div className="flex items-center gap-4 cursor-pointer">
+          <div
+            onClick={() => navigate("/")}
+            className="cursor-pointer"
+          >
 
-            <div className="relative">
-
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 blur-lg opacity-60 rounded-full"></div>
-
-              <div className="relative w-14 h-14 rounded-full bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 flex items-center justify-center text-white font-black text-2xl shadow-2xl">
-                ✨
-              </div>
-            </div>
-
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-white">
-                Blog
-                <span className="bg-gradient-to-r from-pink-400 via-orange-300 to-purple-400 text-transparent bg-clip-text">
-                  App
-                </span>
-              </h1>
-
-              <p className="text-xs text-white/40 tracking-widest uppercase">
-                Creative Platform
-              </p>
-            </div>
-          </div>
-
-          {/* DASHBOARD TEXT */}
-          <div className="hidden lg:flex flex-1 justify-center">
-
-            <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-
-              <span className="text-white/90 font-semibold text-sm">
-                {currentUser?.firstName
-                  ? `✨ ${currentUser.firstName}'s Creative Space`
-                  : "🌎 Share Your Stories"}
-              </span>
-            </div>
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+              BlogApp
+            </h1>
           </div>
 
           {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-10">
 
             {!currentUser ? (
-              <ul className="flex items-center gap-3">
+              <ul className="flex items-center gap-8">
 
                 <li>
                   <NavLink
@@ -112,26 +95,32 @@ function Header() {
 
               </ul>
             ) : (
-              <div className="flex items-center gap-4 pl-4">
+              <div className="flex items-center gap-5">
 
                 {/* PROFILE */}
-                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10">
+                <div className="flex items-center gap-3">
 
                   <img
-                    className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-xl"
+                    className="w-10 h-10 rounded-full object-cover"
                     src={
-                      currentUser?.profileImageUrl || ""
+                      currentUser?.profileImageUrl ||
+                      ""
                     }
                     alt="profile"
                   />
 
                   <div className="hidden lg:block">
-                    <p className="text-white font-bold text-sm">
-                      {currentUser?.firstName || ""}
+
+                    <p className="text-sm font-medium text-gray-900">
+                      {
+                        currentUser?.firstName
+                      }
                     </p>
 
-                    <p className="text-white/50 text-xs">
-                      Creator
+                    <p className="text-xs text-gray-400">
+                      {
+                        currentUser?.role
+                      }
                     </p>
                   </div>
                 </div>
@@ -139,7 +128,7 @@ function Header() {
                 {/* LOGOUT */}
                 <button
                   onClick={handleLogout}
-                  className="px-5 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 text-white font-bold hover:scale-105 transition-all shadow-2xl"
+                  className="px-5 py-2.5 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all"
                 >
                   Logout
                 </button>
@@ -152,9 +141,9 @@ function Header() {
 
             <button
               onClick={toggleMenu}
-              className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-white text-xl hover:bg-white/20 transition-all"
+              className="w-11 h-11 rounded-2xl bg-white border border-gray-200 text-gray-700 text-lg transition-all"
             >
-              {isOpen ? "✕" : "☰"}
+              {isOpen ? "×" : "☰"}
             </button>
           </div>
         </div>
@@ -169,14 +158,12 @@ function Header() {
         }`}
       >
 
-        <div className="mx-4 mb-4 rounded-[32px] overflow-hidden bg-black/90 backdrop-blur-2xl border border-white/10 shadow-2xl">
+        <div className="px-6 pb-6">
 
-          <div className="h-1 bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500"></div>
-
-          <div className="p-6">
+          <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-[28px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
 
             {!currentUser ? (
-              <ul className="space-y-4">
+              <ul className="space-y-5">
 
                 <li>
                   <NavLink
@@ -210,26 +197,32 @@ function Header() {
 
               </ul>
             ) : (
-              <div className="pt-2">
+              <div>
 
-                {/* USER CARD */}
-                <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md rounded-3xl p-4 border border-white/10 mb-6">
+                {/* USER */}
+                <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-6">
 
                   <img
-                    className="w-14 h-14 rounded-full border-2 border-white object-cover shadow-xl"
+                    className="w-12 h-12 rounded-full object-cover"
                     src={
-                      currentUser?.profileImageUrl || ""
+                      currentUser?.profileImageUrl ||
+                      ""
                     }
                     alt="user"
                   />
 
                   <div>
-                    <p className="text-white font-bold text-lg">
-                      {currentUser?.firstName || ""}
+
+                    <p className="text-sm font-medium text-gray-900">
+                      {
+                        currentUser?.firstName
+                      }
                     </p>
 
-                    <p className="text-white/50 text-sm">
-                      Creative Writer ✨
+                    <p className="text-xs text-gray-400">
+                      {
+                        currentUser?.role
+                      }
                     </p>
                   </div>
                 </div>
@@ -237,7 +230,7 @@ function Header() {
                 {/* LOGOUT */}
                 <button
                   onClick={handleLogout}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 text-white font-bold hover:scale-[1.02] transition-all shadow-2xl"
+                  className="w-full py-3 rounded-2xl bg-gray-900 text-white text-sm font-medium hover:bg-black transition-all"
                 >
                   Logout
                 </button>
@@ -247,7 +240,6 @@ function Header() {
           </div>
         </div>
       </div>
-
     </nav>
   );
 }

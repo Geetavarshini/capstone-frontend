@@ -52,7 +52,7 @@ function EditArticle({
         setIsEditing(false);
 
         toast.success(
-          "🎉 Article Updated Successfully"
+          "Article updated successfully"
         );
       }
     } catch (err) {
@@ -66,157 +66,138 @@ function EditArticle({
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 md:p-10 shadow-[0_10px_40px_rgba(0,0,0,0.05)]">
 
-      {/* COLOR BLOBS */}
-      <div className="absolute top-0 left-0 w-52 h-52 bg-pink-300 rounded-full blur-3xl opacity-20"></div>
+      {/* HEADER */}
+      <div className="mb-10">
 
-      <div className="absolute bottom-0 right-0 w-60 h-60 bg-purple-300 rounded-full blur-3xl opacity-20"></div>
+        <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#f4f4f5] text-sm text-gray-600 mb-5">
+          Edit article
+        </span>
 
-      {/* MAIN CARD */}
-      <div className="relative z-10 bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[40px] shadow-2xl overflow-hidden">
+        <h2 className="text-4xl font-semibold tracking-tight text-gray-900 mb-4">
+          Update your story
+        </h2>
 
-        {/* HEADER */}
-        <div className="bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 p-8 text-white">
+        <p className="text-lg text-gray-500 leading-relaxed max-w-2xl">
+          Make changes to your article and save
+          the updated version.
+        </p>
+      </div>
 
-          <div className="inline-block bg-white/20 backdrop-blur-md px-5 py-2 rounded-full text-sm font-semibold mb-5">
-            ✨ Creative Editing Mode
-          </div>
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-8"
+      >
 
-          <h2 className="text-4xl md:text-5xl font-black mb-3">
-            Edit Your Story
-          </h2>
+        {/* TITLE */}
+        <div>
 
-          <p className="text-white/90 text-lg">
-            Refine your ideas and make your article
-            even better.
-          </p>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Title
+          </label>
+
+          <input
+            {...register("title", {
+              required: true,
+            })}
+            placeholder="Edit your title"
+            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+          />
         </div>
 
-        {/* FORM */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="p-8 md:p-10 space-y-8"
-        >
+        {/* CATEGORY */}
+        <div>
 
-          {/* TITLE */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-3">
-              ✍️ Article Title
-            </label>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Category
+          </label>
 
+          <select
+            {...register("category", {
+              required: true,
+            })}
+            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 text-gray-900 outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+          >
+            <option value="Programming">
+              Programming
+            </option>
+
+            <option value="AI">
+              AI
+            </option>
+
+            <option value="Lifestyle">
+              Lifestyle
+            </option>
+
+            <option value="Travel">
+              Travel
+            </option>
+
+            <option value="Health">
+              Health
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+          </select>
+
+          {/* CUSTOM CATEGORY */}
+          {selectedCategory === "Other" && (
             <input
-              {...register("title", {
+              {...register("customCategory", {
                 required: true,
               })}
-              placeholder="Edit your title..."
-              className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 outline-none focus:ring-4 focus:ring-pink-200 focus:border-pink-400 transition-all text-lg"
+              placeholder="Enter custom category"
+              className="mt-4 w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-gray-200 transition-all"
             />
-          </div>
+          )}
+        </div>
 
-          {/* CATEGORY */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-3">
-              🏷️ Category
-            </label>
+        {/* CONTENT */}
+        <div>
 
-            <select
-              {...register("category", {
-                required: true,
-              })}
-              className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 outline-none focus:ring-4 focus:ring-purple-200 focus:border-purple-400 transition-all text-lg"
-            >
-              <option value="Programming">
-                Programming
-              </option>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Content
+          </label>
 
-              <option value="AI">AI</option>
+          <textarea
+            {...register("content", {
+              required: true,
+            })}
+            rows="12"
+            placeholder="Edit your content"
+            className="w-full px-5 py-4 rounded-3xl border border-gray-200 bg-white/80 text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-gray-200 resize-none leading-relaxed transition-all"
+          />
+        </div>
 
-              <option value="Lifestyle">
-                Lifestyle
-              </option>
+        {/* ACTION BUTTONS */}
+        <div className="flex flex-col md:flex-row gap-4 pt-2">
 
-              <option value="Travel">
-                Travel
-              </option>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex-1 py-4 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all disabled:opacity-60"
+          >
+            {isSubmitting
+              ? "Updating..."
+              : "Save changes"}
+          </button>
 
-              <option value="Health">
-                Health
-              </option>
-
-              <option value="Other">
-                Other
-              </option>
-            </select>
-
-            {/* CUSTOM CATEGORY */}
-            {selectedCategory === "Other" && (
-              <input
-                {...register("customCategory", {
-                  required: true,
-                })}
-                placeholder="Enter custom category..."
-                className="mt-4 w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 outline-none focus:ring-4 focus:ring-orange-200 focus:border-orange-400 transition-all text-lg"
-              />
-            )}
-          </div>
-
-          {/* CONTENT */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-3">
-              📖 Story Content
-            </label>
-
-            <textarea
-              {...register("content", {
-                required: true,
-              })}
-              rows="12"
-              placeholder="Edit your content..."
-              className="w-full px-5 py-4 rounded-3xl border border-gray-200 bg-white/80 outline-none focus:ring-4 focus:ring-yellow-200 focus:border-yellow-400 resize-none transition-all text-lg leading-relaxed"
-            />
-          </div>
-
-          {/* WRITING TIPS */}
-          <div className="bg-gradient-to-r from-pink-100 via-orange-100 to-purple-100 rounded-3xl p-6 border border-white">
-
-            <h3 className="font-black text-xl mb-4">
-              💡 Pro Writing Tips
-            </h3>
-
-            <div className="space-y-2 text-gray-700">
-              <p>• Make your introduction stronger</p>
-              <p>• Use shorter readable paragraphs</p>
-              <p>• Add emotional storytelling</p>
-              <p>• Keep the ending memorable</p>
-            </div>
-          </div>
-
-          {/* ACTION BUTTONS */}
-          <div className="flex flex-col md:flex-row gap-4 pt-2">
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex-1 py-5 rounded-3xl bg-black text-white text-lg font-bold hover:scale-[1.02] hover:shadow-2xl transition-all disabled:opacity-60"
-            >
-              {isSubmitting
-                ? "Updating..."
-                : "💾 Save Changes"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                setIsEditing(false)
-              }
-              className="flex-1 py-5 rounded-3xl bg-white border border-gray-200 text-gray-700 text-lg font-bold hover:bg-gray-100 transition-all"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+          <button
+            type="button"
+            onClick={() =>
+              setIsEditing(false)
+            }
+            className="flex-1 py-4 rounded-2xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

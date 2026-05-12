@@ -9,17 +9,22 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 function ArticleDetail() {
   const { state } = useLocation();
+
   const navigate = useNavigate();
 
-  const currentUser = useAuth((state) => state.currentUser);
+  const currentUser = useAuth(
+    (state) => state.currentUser
+  );
 
   const [article, setArticle] = useState(
     state?.article || null
   );
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] =
+    useState(false);
 
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] =
+    useState("");
 
   const [isSubmitting, setIsSubmitting] =
     useState(false);
@@ -34,8 +39,12 @@ function ArticleDetail() {
     currentUser?._id === article?.author?._id ||
     currentUser?.id === article?.author?._id;
 
-  const handleToggleStatus = async (newStatus) => {
-    const action = newStatus ? "restore" : "delete";
+  const handleToggleStatus = async (
+    newStatus
+  ) => {
+    const action = newStatus
+      ? "restore"
+      : "delete";
 
     if (
       !window.confirm(
@@ -58,7 +67,9 @@ function ArticleDetail() {
 
       toast.success(
         `Article ${
-          newStatus ? "restored" : "moved to trash"
+          newStatus
+            ? "restored"
+            : "moved to trash"
         }`
       );
     } catch (err) {
@@ -90,7 +101,7 @@ function ArticleDetail() {
 
       setCommentText("");
 
-      toast.success("💬 Comment posted");
+      toast.success("Comment posted");
     } catch (err) {
       toast.error("Failed to post comment");
     } finally {
@@ -100,70 +111,91 @@ function ArticleDetail() {
 
   if (!article)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fff7f2]">
-        <p className="text-2xl font-bold">
+      <div className="min-h-screen flex items-center justify-center bg-[#fffaf7]">
+        <p className="text-lg text-gray-500">
           Loading article...
         </p>
       </div>
     );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#fff7f2] py-14 px-4">
+    <div className="relative min-h-screen overflow-hidden bg-[#fffaf7] px-6 py-16">
 
-      {/* BACKGROUND BLOBS */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-pink-300 rounded-full blur-3xl opacity-30"></div>
+      {/* BACKGROUND */}
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-pink-100 rounded-full blur-3xl opacity-40"></div>
 
-      <div className="absolute top-40 right-0 w-96 h-96 bg-yellow-200 rounded-full blur-3xl opacity-30"></div>
-
-      <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-300 rounded-full blur-3xl opacity-30"></div>
+      <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-purple-100 rounded-full blur-3xl opacity-40"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
 
         {/* ARTICLE CARD */}
-        <div className="bg-white/70 backdrop-blur-2xl rounded-[40px] border border-white/50 shadow-2xl overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.05)] overflow-hidden">
 
-          {/* HEADER */}
-          <div className="bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 p-10 text-white">
+          {/* ARTICLE HEADER */}
+          <div className="px-8 md:px-12 pt-10 pb-8 border-b border-gray-100">
 
-            <div className="flex flex-wrap gap-3 items-center mb-6">
+            <div className="flex flex-wrap items-center gap-3 mb-6">
 
-              <span className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
+              <span className="px-4 py-2 rounded-full bg-[#f4f4f5] text-sm text-gray-600">
                 {article.category}
               </span>
 
               {!article.isArticleActive && (
-                <span className="bg-red-500 px-4 py-2 rounded-full text-sm font-bold">
+                <span className="px-4 py-2 rounded-full bg-red-50 text-red-500 text-sm">
                   Deleted
                 </span>
               )}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-black leading-tight mb-5">
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-gray-900 mb-6">
               {article.title}
             </h1>
 
-            <p className="text-white/90 text-lg">
-              ✍️ By {article.author?.firstName}{" "}
-              {article.author?.lastName}
-            </p>
+            <div className="flex items-center gap-4">
+
+              <div className="w-12 h-12 rounded-full bg-[#f4f4f5] flex items-center justify-center text-gray-600 font-medium">
+                {article.author?.firstName?.charAt(
+                  0
+                )}
+              </div>
+
+              <div>
+                <p className="text-gray-900 font-medium">
+                  {
+                    article.author
+                      ?.firstName
+                  }{" "}
+                  {
+                    article.author
+                      ?.lastName
+                  }
+                </p>
+
+                <p className="text-sm text-gray-400">
+                  Author
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* CONTENT */}
-          <div className="p-8 md:p-10">
+          <div className="px-8 md:px-12 py-10">
 
-            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-lg">
+            <div className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
               {article.content}
             </div>
 
             {/* AUTHOR ACTIONS */}
             {isAuthor && (
-              <div className="flex flex-wrap gap-4 mt-10">
+              <div className="flex flex-wrap gap-4 mt-12">
 
                 <button
-                  onClick={() => setIsEditing(true)}
-                  className="px-6 py-3 rounded-2xl bg-black text-white font-bold hover:scale-105 transition-all shadow-lg"
+                  onClick={() =>
+                    setIsEditing(true)
+                  }
+                  className="px-6 py-3 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all"
                 >
-                  ✏️ Edit Article
+                  Edit article
                 </button>
 
                 <button
@@ -172,117 +204,122 @@ function ArticleDetail() {
                       !article.isArticleActive
                     )
                   }
-                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold hover:scale-105 transition-all shadow-lg"
+                  className="px-6 py-3 rounded-2xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all"
                 >
                   {article.isArticleActive
-                    ? "🗑️ Delete"
-                    : "♻️ Restore"}
+                    ? "Delete"
+                    : "Restore"}
                 </button>
               </div>
             )}
 
-            {/* EDIT MODE */}
+            {/* EDIT SECTION */}
             {isEditing && (
-              <div className="mt-10 bg-gradient-to-r from-pink-50 via-orange-50 to-purple-50 rounded-[32px] p-6">
+              <div className="mt-12">
                 <EditArticle
                   article={article}
                   setArticle={setArticle}
-                  setIsEditing={setIsEditing}
+                  setIsEditing={
+                    setIsEditing
+                  }
                 />
               </div>
             )}
 
-            {/* COMMENTS SECTION */}
-            <div className="mt-16">
+            {/* COMMENTS */}
+            <div className="mt-20">
 
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-2xl text-white shadow-lg">
-                  💬
-                </div>
+              <div className="mb-8">
 
-                <div>
-                  <h2 className="text-4xl font-black text-gray-900">
-                    Comments
-                  </h2>
+                <h2 className="text-3xl font-semibold tracking-tight text-gray-900 mb-3">
+                  Comments
+                </h2>
 
-                  <p className="text-gray-500">
-                    Join the conversation
-                  </p>
-                </div>
+                <p className="text-gray-500">
+                  Join the conversation and share
+                  your thoughts.
+                </p>
               </div>
 
               {/* COMMENT FORM */}
               <form
                 onSubmit={handlePostComment}
-                className="bg-gradient-to-r from-pink-50 via-orange-50 to-purple-50 rounded-[32px] p-6 mb-10 border border-white shadow-lg"
+                className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[28px] p-6 mb-10"
               >
 
                 <textarea
                   value={commentText}
                   onChange={(e) =>
-                    setCommentText(e.target.value)
+                    setCommentText(
+                      e.target.value
+                    )
                   }
-                  placeholder="Share your thoughts..."
+                  placeholder="Write a comment..."
                   rows="4"
-                  className="w-full rounded-3xl border border-white bg-white/80 p-5 outline-none focus:ring-4 focus:ring-pink-200 resize-none text-lg"
+                  className="w-full rounded-2xl border border-gray-200 bg-white/80 p-5 outline-none focus:ring-2 focus:ring-gray-200 resize-none text-gray-700"
                 />
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-5 px-8 py-4 rounded-2xl bg-black text-white font-bold hover:scale-105 transition-all shadow-xl disabled:opacity-60"
+                  className="mt-5 px-6 py-3 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all disabled:opacity-60"
                 >
                   {isSubmitting
                     ? "Posting..."
-                    : "🚀 Post Comment"}
+                    : "Post comment"}
                 </button>
               </form>
 
               {/* COMMENT LIST */}
-              {article.comments?.length > 0 ? (
-                <div className="space-y-6">
+              {article.comments?.length >
+              0 ? (
+                <div className="space-y-5">
 
-                  {article.comments.map((c, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-white/80 backdrop-blur-xl rounded-[28px] p-6 border border-white shadow-lg hover:-translate-y-1 transition-all"
-                    >
+                  {article.comments.map(
+                    (c, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[28px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)]"
+                      >
 
-                      <div className="flex items-center gap-4 mb-4">
+                        <div className="flex items-center gap-4 mb-4">
 
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold text-lg">
-                          {c.user?.firstName?.charAt(0) ||
-                            "U"}
+                          <div className="w-11 h-11 rounded-full bg-[#f4f4f5] flex items-center justify-center text-gray-600 font-medium">
+                            {c.user?.firstName?.charAt(
+                              0
+                            ) || "U"}
+                          </div>
+
+                          <div>
+                            <h3 className="font-medium text-gray-900">
+                              {c.user
+                                ?.firstName ||
+                                "User"}
+                            </h3>
+
+                            <p className="text-sm text-gray-400">
+                              Community member
+                            </p>
+                          </div>
                         </div>
 
-                        <div>
-                          <h3 className="font-bold text-gray-900">
-                            {c.user?.firstName || "User"}
-                          </h3>
-
-                          <p className="text-sm text-gray-400">
-                            Community Member
-                          </p>
-                        </div>
+                        <p className="text-gray-600 leading-relaxed">
+                          {c.comment}
+                        </p>
                       </div>
-
-                      <p className="text-gray-700 leading-relaxed">
-                        {c.comment}
-                      </p>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               ) : (
-                <div className="bg-white/70 rounded-[28px] p-10 text-center border border-white shadow-lg">
-                  <div className="text-6xl mb-4">✨</div>
+                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[28px] p-12 text-center">
 
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  <h3 className="text-2xl font-medium text-gray-900 mb-3">
                     No comments yet
                   </h3>
 
                   <p className="text-gray-500">
-                    Be the first one to start the
-                    discussion.
+                    Start the discussion by sharing
+                    your thoughts.
                   </p>
                 </div>
               )}
