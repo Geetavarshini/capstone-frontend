@@ -178,11 +178,19 @@ function UserProfile() {
 
                           <div className="flex items-center gap-3">
 
-                            <div className="w-10 h-10 rounded-full bg-[#f4f4f5] flex items-center justify-center text-sm font-medium text-gray-700">
-                              {article.author?.firstName?.charAt(
-                                0
-                              ) || "A"}
-                            </div>
+                            {article.author?.profileImageUrl ? (
+                              <img
+                                src={article.author.profileImageUrl}
+                                alt="author"
+                                className="w-10 h-10 rounded-full object-cover border border-white shadow-sm"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-[#f4f4f5] flex items-center justify-center text-sm font-medium text-gray-700">
+                                {article.author?.firstName?.charAt(
+                                  0
+                                ) || "A"}
+                              </div>
+                            )}
 
                             <div>
 
