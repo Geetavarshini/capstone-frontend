@@ -22,47 +22,52 @@ function Home() {
   };
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-[#fff7f2] text-gray-900">
+    <div className="relative overflow-hidden min-h-screen bg-[#fffaf7] text-gray-900">
 
-      {/* BACKGROUND BLOBS */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-pink-300 rounded-full blur-3xl opacity-30"></div>
-      <div className="absolute top-40 right-0 w-96 h-96 bg-yellow-200 rounded-full blur-3xl opacity-30"></div>
-      <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-300 rounded-full blur-3xl opacity-30"></div>
+      {/* SOFT BACKGROUND */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-pink-100 rounded-full blur-3xl opacity-40"></div>
+
+      <div className="absolute top-40 right-0 w-[500px] h-[500px] bg-purple-100 rounded-full blur-3xl opacity-40"></div>
 
       {/* HERO */}
-      <section className="relative z-10 pt-24 pb-24 px-6">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+      <section className="relative z-10 px-6 pt-28 pb-24">
+
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
 
           {/* LEFT */}
           <div>
-            <span className="inline-block bg-black text-white px-5 py-2 rounded-full text-sm font-semibold mb-6">
-              ✨ Creative Article Platform
+
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/70 backdrop-blur-xl border border-white text-sm text-gray-600 mb-8 shadow-sm">
+              Creative publishing platform
             </span>
 
-            <h1 className="text-6xl lg:text-7xl font-black leading-tight mb-6">
-              Share your
-              <span className="block bg-gradient-to-r from-pink-500 via-orange-400 to-purple-500 text-transparent bg-clip-text">
-                ideas with the world
-              </span>
+            <h1 className="text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] text-gray-900 mb-8">
+              Share stories,
+              ideas, and moments
+              that matter.
             </h1>
 
-            <p className="text-lg text-gray-600 max-w-xl mb-10 leading-relaxed">
-              Discover inspiring stories, publish your thoughts,
-              and connect with a colorful community of creators.
+            <p className="text-lg text-gray-500 leading-relaxed max-w-xl mb-10">
+              A calm space for writers and readers to
+              discover thoughtful articles, meaningful
+              ideas, and creative perspectives.
             </p>
 
             <div className="flex flex-wrap gap-4">
+
               <button
                 onClick={handleStartWriting}
-                className="px-8 py-4 rounded-2xl bg-black text-white font-bold hover:scale-105 transition-all shadow-xl"
+                className="px-8 py-4 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all shadow-sm"
               >
-                {isAuthenticated ? "Go to Dashboard" : "Start Writing"}
+                {isAuthenticated
+                  ? "Go to Dashboard"
+                  : "Start Writing"}
               </button>
 
               {!isAuthenticated && (
                 <button
                   onClick={() => navigate("/login")}
-                  className="px-8 py-4 rounded-2xl bg-white border border-gray-200 font-semibold hover:bg-gray-100 transition"
+                  className="px-8 py-4 rounded-2xl bg-white/80 backdrop-blur-xl border border-gray-200 text-gray-700 font-medium hover:bg-white transition-all"
                 >
                   Sign In
                 </button>
@@ -70,30 +75,63 @@ function Home() {
             </div>
           </div>
 
-          {/* RIGHT SIDE ARTICLE CARDS */}
-          <div className="relative h-[500px] hidden lg:block">
+          {/* RIGHT */}
+          <div className="hidden lg:block relative h-[520px]">
 
-            <div className="absolute top-0 left-10 bg-white p-6 rounded-3xl shadow-2xl w-72 rotate-[-8deg] hover:rotate-0 transition-all">
-              <div className="h-40 rounded-2xl bg-gradient-to-r from-pink-400 to-orange-300 mb-4"></div>
-              <h3 className="font-bold text-xl mb-2">Travel Stories</h3>
-              <p className="text-gray-500 text-sm">
-                Explore amazing experiences from around the globe.
+            {/* CARD 1 */}
+            <div className="absolute top-0 left-0 w-72 bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+
+              <div className="h-44 rounded-3xl bg-[#f8e8e8] mb-5"></div>
+
+              <span className="text-xs text-gray-400 uppercase tracking-[0.2em]">
+                Travel
+              </span>
+
+              <h3 className="text-xl font-semibold text-gray-900 mt-3 mb-3">
+                Quiet mornings in Kyoto
+              </h3>
+
+              <p className="text-gray-500 leading-relaxed text-sm">
+                Reflections on slow travel, silence,
+                and finding beauty in small moments.
               </p>
             </div>
 
-            <div className="absolute top-32 right-0 bg-white p-6 rounded-3xl shadow-2xl w-72 rotate-[8deg] hover:rotate-0 transition-all">
-              <div className="h-40 rounded-2xl bg-gradient-to-r from-purple-400 to-indigo-300 mb-4"></div>
-              <h3 className="font-bold text-xl mb-2">Tech & AI</h3>
-              <p className="text-gray-500 text-sm">
-                Read modern ideas shaping the future.
+            {/* CARD 2 */}
+            <div className="absolute top-24 right-0 w-72 bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+
+              <div className="h-44 rounded-3xl bg-[#ece8f8] mb-5"></div>
+
+              <span className="text-xs text-gray-400 uppercase tracking-[0.2em]">
+                Technology
+              </span>
+
+              <h3 className="text-xl font-semibold text-gray-900 mt-3 mb-3">
+                Designing for calm experiences
+              </h3>
+
+              <p className="text-gray-500 leading-relaxed text-sm">
+                Why modern products should feel
+                softer, quieter, and more human.
               </p>
             </div>
 
-            <div className="absolute bottom-0 left-24 bg-white p-6 rounded-3xl shadow-2xl w-72 rotate-[-5deg] hover:rotate-0 transition-all">
-              <div className="h-40 rounded-2xl bg-gradient-to-r from-yellow-300 to-pink-300 mb-4"></div>
-              <h3 className="font-bold text-xl mb-2">Lifestyle</h3>
-              <p className="text-gray-500 text-sm">
-                Daily inspiration, habits, wellness & creativity.
+            {/* CARD 3 */}
+            <div className="absolute bottom-0 left-24 w-72 bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+
+              <div className="h-44 rounded-3xl bg-[#f6eddc] mb-5"></div>
+
+              <span className="text-xs text-gray-400 uppercase tracking-[0.2em]">
+                Lifestyle
+              </span>
+
+              <h3 className="text-xl font-semibold text-gray-900 mt-3 mb-3">
+                Building mindful routines
+              </h3>
+
+              <p className="text-gray-500 leading-relaxed text-sm">
+                Simple daily habits that help create
+                clarity, focus, and creativity.
               </p>
             </div>
 
@@ -102,16 +140,20 @@ function Home() {
       </section>
 
       {/* FEATURES */}
-      <section className="relative z-10 py-24 px-6">
+      <section className="relative z-10 px-6 py-24">
+
         <div className="max-w-7xl mx-auto">
 
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black mb-4">
-              Why creators love us 💜
+          <div className="mb-16">
+
+            <h2 className="text-4xl font-semibold tracking-tight text-gray-900 mb-4">
+              Built for thoughtful storytelling
             </h2>
 
-            <p className="text-gray-600 text-lg">
-              Everything designed for modern storytellers.
+            <p className="text-gray-500 text-lg max-w-2xl">
+              Everything you need to write, publish,
+              and explore articles in a calm,
+              distraction-free experience.
             </p>
           </div>
 
@@ -119,80 +161,81 @@ function Home() {
 
             {[
               {
-                icon: "✍️",
-                title: "Write Freely",
-                desc: "Create beautiful articles with ease."
+                title: "Clean writing experience",
+                desc: "Focus on your words with a simple and elegant editor."
               },
               {
-                icon: "🚀",
-                title: "Grow Fast",
-                desc: "Reach readers who love your content."
+                title: "Discover meaningful stories",
+                desc: "Explore articles from writers across different topics and interests."
               },
               {
-                icon: "🌎",
-                title: "Global Community",
-                desc: "Connect with writers from everywhere."
+                title: "Built for creators",
+                desc: "Manage and publish your content with ease."
               }
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white/70 backdrop-blur-lg p-10 rounded-[32px] border border-white shadow-xl hover:-translate-y-2 transition-all"
+                className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all"
               >
-                <div className="text-5xl mb-5">{item.icon}</div>
 
-                <h3 className="text-2xl font-bold mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-[#f4f4f5] mb-6"></div>
+
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   {item.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-500 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
             ))}
-
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="relative z-10 py-24 px-6">
+      <section className="relative z-10 px-6 pb-24">
+
         <div className="max-w-5xl mx-auto">
 
-          <div className="bg-black text-white rounded-[40px] p-14 text-center shadow-2xl">
+          <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[40px] p-14 text-center shadow-[0_10px_40px_rgba(0,0,0,0.05)]">
 
-            <h2 className="text-5xl font-black mb-6">
-              Your story deserves readers ✨
+            <h2 className="text-4xl font-semibold tracking-tight text-gray-900 mb-5">
+              Start sharing your perspective
             </h2>
 
-            <p className="text-gray-300 text-lg mb-10">
-              Start writing today and build your creative presence online.
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+              Write about your experiences, ideas,
+              creativity, and thoughts in a space
+              designed for modern storytelling.
             </p>
 
             {isAuthenticated ? (
               <button
                 onClick={handleStartWriting}
-                className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition"
+                className="px-8 py-4 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all"
               >
                 Go to Dashboard
               </button>
             ) : (
               <div className="flex justify-center gap-4 flex-wrap">
+
                 <button
                   onClick={() => navigate("/register")}
-                  className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition"
+                  className="px-8 py-4 rounded-2xl bg-gray-900 text-white font-medium hover:bg-black transition-all"
                 >
                   Create Account
                 </button>
 
                 <button
                   onClick={() => navigate("/login")}
-                  className="border border-gray-500 px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-black transition"
+                  className="px-8 py-4 rounded-2xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all"
                 >
                   Sign In
                 </button>
+
               </div>
             )}
-
           </div>
         </div>
       </section>
